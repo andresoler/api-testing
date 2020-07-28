@@ -12,7 +12,9 @@ class PostControllerTest extends TestCase
 
     public function test_store()
     {
-        $this->withoutExceptionHandling();
+
+        //Visualiza claramente lo que se ejecuta
+        //$this->withoutExceptionHandling();
 
         $response = $this->json('POST','/api/posts', [
             'title' => 'El post de prueba'
@@ -24,4 +26,22 @@ class PostControllerTest extends TestCase
 
         $this->assertDatabaseHas('posts', ['title' => 'El post de prueba']);
     }
+
+    public function test_validate_title()
+    {
+
+
+        $response = $this->json('POST','/api/posts', [
+            'title' => ''
+        ]);
+
+        // Stattus imposible de validar
+        //Validar que no se reciba un titulo nulo
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors('title');
+
+    }
+
+
+
 }
