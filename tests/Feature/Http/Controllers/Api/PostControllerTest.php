@@ -68,7 +68,7 @@ class PostControllerTest extends TestCase
     {
 
         //Visualiza claramente lo que se ejecuta
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $post = factory(Post::class)->create();
 
@@ -81,6 +81,22 @@ class PostControllerTest extends TestCase
             ->assertStatus(200); // ok
 
         $this->assertDatabaseHas('posts', ['title' => 'Nuevo']);
+    }
+
+    public function test_delete()
+    {
+
+        //Visualiza claramente lo que se ejecuta
+        //$this->withoutExceptionHandling();
+
+        $post = factory(Post::class)->create();
+
+        $response = $this->json('DELETE',"/api/posts/$post->id");
+
+        $response->assertSee(null)
+            ->assertStatus(204); // SIN CONTENIDO 
+
+        $this->assertDatabaseMissing('posts', ['title' => $post->id]);
     }
 
 
